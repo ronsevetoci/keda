@@ -4,71 +4,89 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kedacore/keda/v2/pkg/scalers/oci"
-	"k8s.io/apimachinery/pkg/api/resource"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	v2 "k8s.io/api/autoscaling/v2"
 	"k8s.io/apimachinery/pkg/labels"
-	external_metrics "k8s.io/metrics/pkg/apis/external_metrics"
+	"k8s.io/metrics/pkg/apis/external_metrics"
+
+	"github.com/kedacore/keda/v2/pkg/scalers/scalersconfig"
+	kedautil "github.com/kedacore/keda/v2/pkg/util"
+	"github.com/ronsevetoci/keda/v2/pkg/scalers/oci"
+)
+
+const (
+	ociQueueMetricType = "External"
 )
 
 type ociQueueScaler struct {
-	metadata       *oci.QueueMetadata
-	client         *oci.QueueClient
-	scalerMetadata *ScalerMetadata
+	metadata         *oci.OCITriggerMetadata
+	queueClient      *oci.QueueClient
+	scalerMetricName string
+	metricType       v2.MetricTargetType
 }
 
-func NewOCIQueueScaler(config *ScalerConfig) (Scaler, error) {
-	meta, err := oci.ParseMetadata(config)
+func NewOCIQueueScaler(config *scalersconfig.ScalerConfig) (Scaler, error) {
+	meta, err := oci.ParseOCITriggerMetadata(config.TriggerMetadata)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing metadata: %s", err)
+		return nil, fmt.Errorf("error parsing OCI trigger metadata: %s", err)
 	}
 
 	client, err := oci.NewQueueClient(meta)
 	if err != nil {
-		return nil, fmt.Errorf("error creating queue client: %s", err)
+		return nil, fmt.Errorf("error creating OCI queue client: %s", err)
 	}
 
+	metricName := kedautil.NormalizeString(fmt.Sprintf("oci-queue-%s", meta.QueueID))
+
 	return &ociQueueScaler{
-		metadata:       meta,
-		client:         client,
-		scalerMetadata: &config.ScalerMetadata,
+		metadata:         meta,
+		queueClient:      client,
+		scalerMetricName: GenerateMetricNameWithIndex(config.TriggerIndex, metricName),
+		metricType:       v2.AverageValue,
 	}, nil
 }
 
 func (s *ociQueueScaler) IsActive(ctx context.Context) (bool, error) {
-	stats, err := s.client.Client.GetStats(ctx, s.metadata.QueueID)
+	stats, err := s.queueClient.GetStats(ctx, s.metadata.QueueID)
 	if err != nil {
 		return false, err
 	}
 
-	total := *stats.Queue.VisibleMessages + *stats.Queue.InFlightMessages
-	return total > 0, nil
-}
+	visible := *stats.Queue.VisibleMessages
+	inflight := *stats.Queue.InFlightMessages
 
-func (s *ociQueueScaler) GetMetricSpecForScaling(context.Context) []external_metrics.ExternalMetricValue {
-	return []external_metrics.ExternalMetricValue{{
-		MetricName: oci.MetricName,
-		Value:      *resource.NewQuantity(int64(s.metadata.QueueLength), resource.DecimalSI),
-		Timestamp:  metav1.Now(),
-	}}
-}
-
-func (s *ociQueueScaler) GetMetrics(ctx context.Context, metricName string, metricSelector labels.Selector) ([]external_metrics.ExternalMetricValue, error) {
-	stats, err := s.client.Client.GetStats(ctx, s.metadata.QueueID)
-	if err != nil {
-		return nil, err
-	}
-
-	total := *stats.Queue.VisibleMessages + *stats.Queue.InFlightMessages
-	metric := external_metrics.ExternalMetricValue{
-		MetricName: oci.MetricName,
-		Value:      *resource.NewQuantity(int64(total), resource.DecimalSI),
-		Timestamp:  metav1.Now(),
-	}
-
-	return []external_metrics.ExternalMetricValue{metric}, nil
+	return (visible + inflight) > 0, nil
 }
 
 func (s *ociQueueScaler) Close(context.Context) error {
 	return nil
+}
+
+func (s *ociQueueScaler) GetMetricSpecForScaling(context.Context) []v2.MetricSpec {
+	externalMetric := &v2.ExternalMetricSource{
+		Metric: v2.MetricIdentifier{
+			Name: s.scalerMetricName,
+		},
+		Target: GetMetricTarget(s.metricType, s.metadata.QueueLength),
+	}
+
+	return []v2.MetricSpec{
+		{
+			Type:     v2.ExternalMetricSourceType,
+			External: externalMetric,
+		},
+	}
+}
+
+func (s *ociQueueScaler) GetMetricsAndActivity(ctx context.Context, metricName string, _ labels.Selector) ([]external_metrics.ExternalMetricValue, bool, error) {
+	stats, err := s.queueClient.GetStats(ctx, s.metadata.QueueID)
+	if err != nil {
+		return nil, false, err
+	}
+
+	visible := *stats.Queue.VisibleMessages
+	inflight := *stats.Queue.InFlightMessages
+	total := visible + inflight
+
+	metric := GenerateMetricInMili(metricName, float64(total))
+	return []external_metrics.ExternalMetricValue{metric}, total > 0, nil
 }

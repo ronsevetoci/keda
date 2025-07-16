@@ -766,6 +766,9 @@ github.com/gocql/gocql
 github.com/gocql/gocql/internal/lru
 github.com/gocql/gocql/internal/murmur
 github.com/gocql/gocql/internal/streams
+# github.com/gofrs/flock v0.8.1
+## explicit
+github.com/gofrs/flock
 # github.com/gofrs/uuid v4.4.0+incompatible
 ## explicit
 github.com/gofrs/uuid
@@ -1098,6 +1101,78 @@ github.com/jstemmer/go-junit-report/v2/junit
 github.com/jstemmer/go-junit-report/v2/parser/gotest
 github.com/jstemmer/go-junit-report/v2/parser/gotest/internal/collector
 github.com/jstemmer/go-junit-report/v2/parser/gotest/internal/reader
+# github.com/kedacore/keda/v2 v2.17.2
+## explicit; go 1.23.8
+github.com/kedacore/keda/v2/apis/eventing/v1alpha1
+github.com/kedacore/keda/v2/apis/keda/v1alpha1
+github.com/kedacore/keda/v2/controllers/eventing
+github.com/kedacore/keda/v2/controllers/keda
+github.com/kedacore/keda/v2/controllers/keda/util
+github.com/kedacore/keda/v2/pkg/certificates
+github.com/kedacore/keda/v2/pkg/common/message
+github.com/kedacore/keda/v2/pkg/eventemitter
+github.com/kedacore/keda/v2/pkg/eventemitter/eventdata
+github.com/kedacore/keda/v2/pkg/eventreason
+github.com/kedacore/keda/v2/pkg/fallback
+github.com/kedacore/keda/v2/pkg/generated/clientset/versioned
+github.com/kedacore/keda/v2/pkg/generated/clientset/versioned/scheme
+github.com/kedacore/keda/v2/pkg/generated/clientset/versioned/typed/keda/v1alpha1
+github.com/kedacore/keda/v2/pkg/generated/clientset/versioned/typed/keda/v1alpha1/fake
+github.com/kedacore/keda/v2/pkg/generated/informers/externalversions/internalinterfaces
+github.com/kedacore/keda/v2/pkg/generated/informers/externalversions/keda
+github.com/kedacore/keda/v2/pkg/generated/informers/externalversions/keda/v1alpha1
+github.com/kedacore/keda/v2/pkg/generated/listers/keda/v1alpha1
+github.com/kedacore/keda/v2/pkg/k8s
+github.com/kedacore/keda/v2/pkg/metricscollector
+github.com/kedacore/keda/v2/pkg/metricscollector/webhook
+github.com/kedacore/keda/v2/pkg/metricsservice
+github.com/kedacore/keda/v2/pkg/metricsservice/api
+github.com/kedacore/keda/v2/pkg/metricsservice/utils
+github.com/kedacore/keda/v2/pkg/mock/mock_client
+github.com/kedacore/keda/v2/pkg/mock/mock_eventemitter
+github.com/kedacore/keda/v2/pkg/mock/mock_scale
+github.com/kedacore/keda/v2/pkg/mock/mock_scaler
+github.com/kedacore/keda/v2/pkg/mock/mock_scaling
+github.com/kedacore/keda/v2/pkg/mock/mock_scaling/mock_executor
+github.com/kedacore/keda/v2/pkg/mock/mock_secretlister
+github.com/kedacore/keda/v2/pkg/mock/mock_serviceaccounts
+github.com/kedacore/keda/v2/pkg/provider
+github.com/kedacore/keda/v2/pkg/scalers
+github.com/kedacore/keda/v2/pkg/scalers/authentication
+github.com/kedacore/keda/v2/pkg/scalers/aws
+github.com/kedacore/keda/v2/pkg/scalers/azure
+github.com/kedacore/keda/v2/pkg/scalers/externalscaler
+github.com/kedacore/keda/v2/pkg/scalers/gcp
+github.com/kedacore/keda/v2/pkg/scalers/kafka
+github.com/kedacore/keda/v2/pkg/scalers/liiklus
+github.com/kedacore/keda/v2/pkg/scalers/liiklus/mocks
+github.com/kedacore/keda/v2/pkg/scalers/openstack
+github.com/kedacore/keda/v2/pkg/scalers/openstack/utils
+github.com/kedacore/keda/v2/pkg/scalers/scalersconfig
+github.com/kedacore/keda/v2/pkg/scalers/splunk
+github.com/kedacore/keda/v2/pkg/scaling
+github.com/kedacore/keda/v2/pkg/scaling/cache
+github.com/kedacore/keda/v2/pkg/scaling/cache/metricscache
+github.com/kedacore/keda/v2/pkg/scaling/executor
+github.com/kedacore/keda/v2/pkg/scaling/modifiers
+github.com/kedacore/keda/v2/pkg/scaling/resolver
+github.com/kedacore/keda/v2/pkg/scaling/scaledjob
+github.com/kedacore/keda/v2/pkg/status
+github.com/kedacore/keda/v2/pkg/util
+github.com/kedacore/keda/v2/tests/helper
+github.com/kedacore/keda/v2/tests/scalers/arangodb
+github.com/kedacore/keda/v2/tests/scalers/aws/helpers/cloudwatch
+github.com/kedacore/keda/v2/tests/scalers/azure/azure_managed_prometheus/helper
+github.com/kedacore/keda/v2/tests/scalers/azure/helper
+github.com/kedacore/keda/v2/tests/scalers/nats_jetstream/helper
+github.com/kedacore/keda/v2/tests/scalers/openstack_swift
+github.com/kedacore/keda/v2/tests/scalers/postgresql/helper
+github.com/kedacore/keda/v2/tests/scalers/prometheus
+github.com/kedacore/keda/v2/tests/scalers/pulsar/helper
+github.com/kedacore/keda/v2/tests/scalers/rabbitmq
+github.com/kedacore/keda/v2/tests/scalers/redis/helper
+github.com/kedacore/keda/v2/tests/utils/helper
+github.com/kedacore/keda/v2/version
 # github.com/klauspost/compress v1.17.11
 ## explicit; go 1.21
 github.com/klauspost/compress
@@ -1287,6 +1362,12 @@ github.com/onsi/gomega/types
 # github.com/open-policy-agent/cert-controller v0.12.0
 ## explicit; go 1.22.0
 github.com/open-policy-agent/cert-controller/pkg/rotator
+# github.com/oracle/oci-go-sdk/v65 v65.95.0
+## explicit; go 1.13
+github.com/oracle/oci-go-sdk/v65/common
+github.com/oracle/oci-go-sdk/v65/common/auth
+github.com/oracle/oci-go-sdk/v65/common/utils
+github.com/oracle/oci-go-sdk/v65/queue
 # github.com/pborman/uuid v1.2.1
 ## explicit
 github.com/pborman/uuid
@@ -1455,6 +1536,9 @@ github.com/shopspring/decimal
 # github.com/sirupsen/logrus v1.9.3
 ## explicit; go 1.13
 github.com/sirupsen/logrus
+# github.com/sony/gobreaker v0.5.0
+## explicit; go 1.12
+github.com/sony/gobreaker
 # github.com/spf13/afero v1.11.0
 ## explicit; go 1.19
 github.com/spf13/afero

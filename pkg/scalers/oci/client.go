@@ -1,6 +1,7 @@
 package oci
 
 import (
+	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/queue"
 )
 
@@ -8,8 +9,8 @@ type QueueClient struct {
 	Client queue.QueueClient
 }
 
-func NewQueueClient(meta *QueueMetadata) (*QueueClient, error) {
-	provider, err := GetOCIAuthProvider(meta.AuthType)
+func NewQueueClient(meta *OCITriggerMetadata) (*QueueClient, error) {
+	provider, err := common.DefaultConfigProvider()
 	if err != nil {
 		return nil, err
 	}

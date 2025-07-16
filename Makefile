@@ -133,7 +133,7 @@ manifests: controller-gen ## Generate ClusterRole and CustomResourceDefinition o
 	rm config/crd/bases/keda.sh_withtriggers.yaml
 
 generate: controller-gen mockgen-gen proto-gen ## Generate code containing DeepCopy, DeepCopyInto, DeepCopyObject method implementations (API), mocks and proto.
-	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
+	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./apis/..."
 
 fmt: ## Run go fmt against code.
 	go fmt ./...

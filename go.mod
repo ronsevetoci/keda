@@ -1,4 +1,4 @@
-module github.com/kedacore/keda/v2
+module github.com/ronsevet/keda/v2.0.0
 
 go 1.23.8
 
